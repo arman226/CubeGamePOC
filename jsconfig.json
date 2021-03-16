@@ -1,0 +1,9 @@
+{
+  "include": ["app/**/*"],
+  "compilerOptions": {
+    "target": "ES6",
+    "module": "commonjs",
+    "allowSyntheticDefaultImports": false,
+    "baseUrl": "./app"
+  }
+}

@@ -1,23 +1,26 @@
 import React, {useState} from 'react';
-import {Text, View, Button, FlatList, Dimensions} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Button,
+  FlatList,
+  Dimensions,
+  TouchableOpacity,
+} from 'react-native';
 import {getRandomInt} from 'utils/number.utils';
 
 const colors = ['red', 'orange', 'yellow', 'green', 'blue', 'indigo'];
 
 const CubeGame = () => {
-  const [color1, setColor1] = useState(0);
-  const [color2, setColor2] = useState(0);
-  const [color3, setColor3] = useState(0);
   const [isRolling, setIsRolling] = useState(false);
   const totalNumber = 5;
   const [colorings, setColorings] = useState([0, 0, 0]);
+  const [bets, setBets] = useState([0, 0, 0, 0, 0, 0]);
+  const [totalBets, setTotalBets] = useState(0);
 
   const change = () => {
-    console.log('hel');
     setIsRolling(true);
-    setColor1(getRandomInt(totalNumber));
-    setColor2(getRandomInt(totalNumber));
-    setColor3(getRandomInt(totalNumber));
 
     setColorings([
       getRandomInt(totalNumber),
@@ -26,33 +29,73 @@ const CubeGame = () => {
     ]);
 
     setIsRolling(false);
+    setBets([0, 0, 0, 0, 0, 0]);
   };
+
+  const onAddBet = index => {
+    let tempBets = bets;
+    tempBets[index] = tempBets[index] + 100;
+    setBets(tempBets);
+    setTotalBets(
+      bets.reduce(function (a, b) {
+        return a + b;
+      }, 0),
+    );
+  };
+
+  if (isRolling) {
+    return <Text>rolling...</Text>;
+  }
+
   return (
-    <View>
+    <View style={{padding: 10}}>
+      <Text>{totalBets}</Text>
       <FlatList
         numColumns={3}
         data={colorings}
-        contentContainerStyle={{
-          justifyContent: 'center',
-          width: Dimensions.get('screen').width,
-          alignItems: 'center',
-        }}
+        contentContainerStyle={useStyle.colorsContainer}
         keyExtractor={(item, index) => index.toString()}
-        renderItem={({item}) => (
-          <View
-            style={{
-              backgroundColor: colors[item],
-              padding: 10,
-              marginHorizontal: 10,
-              marginVertical: 10,
-            }}
-          />
+        renderItem={({item}, idx) => (
+          <View style={useStyle.colorItem(colors[item])}></View>
         )}
         extraData={colorings}
       />
-      <Button title="Test" onPress={change} />
+      <Button title="Roll" onPress={change} />
+
+      {/* Options */}
+
+      <FlatList
+        numColumns={3}
+        contentContainerStyle={useStyle.colorsContainer}
+        extraData={totalBets}
+        keyExtractor={(item, index) => index.toString()}
+        data={colors}
+        renderItem={({item, index}) => (
+          <TouchableOpacity
+            key={index}
+            style={useStyle.colorItem(item)}
+            activeOpacity={0.8}
+            onPress={() => onAddBet(index)}>
+            <Text style={{color: '#FFFF'}}>{bets[index]}</Text>
+          </TouchableOpacity>
+        )}
+      />
     </View>
   );
 };
+
+const useStyle = StyleSheet.create({
+  colorsContainer: {
+    justifyContent: 'center',
+    width: Dimensions.get('screen').width,
+    alignItems: 'center',
+  },
+  colorItem: color => ({
+    backgroundColor: color,
+    padding: 10,
+    marginHorizontal: 10,
+    marginVertical: 10,
+  }),
+});
 
 export default CubeGame;

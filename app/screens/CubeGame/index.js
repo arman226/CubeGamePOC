@@ -3,15 +3,15 @@ import {
   StyleSheet,
   Text,
   View,
-  Button,
   FlatList,
   Dimensions,
   TouchableOpacity,
 } from 'react-native';
 import {getRandomInt} from 'utils/number.utils';
 import PlaceBetsModal from './PlaceBetsModal';
+import Button from 'components/Button';
 
-const colors = ['red', 'orange', 'yellow', 'green', 'blue', 'indigo'];
+const colors = ['red', 'pink', 'yellow', 'green', 'blue', 'indigo'];
 
 const CubeGame = () => {
   const [isRolling, setIsRolling] = useState(false);
@@ -33,8 +33,8 @@ const CubeGame = () => {
     await setTimeout(() => {
       setIsRolling(false);
     }, 1000);
-
     setBets([0, 0, 0, 0, 0, 0]);
+    setTotalBets(0);
   };
 
   const onAddBet = (index, valueToAdd) => {
@@ -46,7 +46,6 @@ const CubeGame = () => {
         return a + b;
       }, 0),
     );
-
     hideBetsModal();
   };
 
@@ -67,7 +66,23 @@ const CubeGame = () => {
         onValueSelected={onAddBet}
       />
       <View style={{padding: 10}}>
-        <Text>{totalBets}</Text>
+        <View>
+          {/* coin */}
+          <View
+            style={{
+              backgroundColor: 'yellow',
+              width: 40,
+              height: 40,
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: 5,
+              borderRadius: 40,
+              borderWidth: 1,
+            }}>
+            <Text style={{color: 'black', fontWeight: 'bold'}}>$</Text>
+          </View>
+          <Text>{totalBets}</Text>
+        </View>
         <FlatList
           numColumns={3}
           data={colorings}
@@ -78,8 +93,8 @@ const CubeGame = () => {
           )}
           extraData={colorings}
         />
-        <Button title="Roll" onPress={change} />
 
+        <Button title="ROLL" onButtonPressed={change} />
         {/* Options */}
 
         <FlatList
@@ -97,7 +112,12 @@ const CubeGame = () => {
                 setShouldShowBetsModal(true);
                 setIndexToUpdate(index);
               }}>
-              <Text style={{color: '#000', fontWeight: 'bold'}}>
+              <Text
+                style={{
+                  color: '#000',
+                  fontWeight: 'bold',
+                  textAlign: 'center',
+                }}>
                 {bets[index] !== 0 ? bets[index] : null}
               </Text>
             </TouchableOpacity>
@@ -117,9 +137,14 @@ const useStyle = StyleSheet.create({
   colorItem: color => ({
     backgroundColor: color,
     padding: 10,
-    marginHorizontal: 10,
-    marginVertical: 10,
+    marginHorizontal: 3,
+    marginVertical: 3,
     width: 60,
+    height: 60,
+    borderColor: 'black',
+    borderWidth: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
   }),
 });
 

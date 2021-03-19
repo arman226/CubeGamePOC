@@ -10,7 +10,7 @@ const RoutesNavigation = () => {
       <Stack.Screen
         name="Home"
         component={Cube}
-        // options={{headerShown: false}}
+        options={{headerShown: false}}
       />
     </Stack.Navigator>
   );

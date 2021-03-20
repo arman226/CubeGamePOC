@@ -7,6 +7,7 @@ import {
   Dimensions,
   TouchableOpacity,
   Image,
+  TextInput,
 } from 'react-native';
 import {getArraySum, getRandomInt} from 'utils/number.utils';
 import PlaceBetsModal from './PlaceBetsModal';
@@ -21,6 +22,8 @@ import {
   YELLOW,
 } from 'constants/colors.constants';
 import test from 'assets/color-roll.gif';
+import auth from '@react-native-firebase/auth';
+import {useEffect} from 'react';
 
 const colors = [RED, PINK, YELLOW, GREEN, BLUE, INDIGO];
 const TOTAL_NUMBER_OF_COLORS = 5;
@@ -33,6 +36,8 @@ const CubeGame = () => {
   const [shouldShowBetsModal, setShouldShowBetsModal] = useState(false);
   const [indexToUpdate, setIndexToUpdate] = useState(0);
   const [poinstEarned, setPointsEarned] = useState(0);
+  const [confirm, setConfirm] = useState(null);
+  const [otp, setOtp] = useState('');
 
   const change = async () => {
     setIsRolling(true);
@@ -87,6 +92,37 @@ const CubeGame = () => {
     </TouchableOpacity>
   );
 
+  const trySending = async () => {
+    try {
+      console.log('wait...');
+      const confirmation = await auth().signInWithPhoneNumber('+639291960514');
+      setConfirm(confirmation);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const tryConfirming = async () => {
+    try {
+      const response = await confirm.confirm(otp);
+      alert(JSON.stringify(response));
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  useEffect(() => {
+    // return () => {
+    //   auth().onAuthStateChanged(user => {
+    //     if (user) {
+    //       console.log('user', user);
+    //     } else {
+    //       setConfirm(null);
+    //       setOtp('');
+    //     }
+    //   });
+    // };
+  }, []);
   if (isRolling) {
     return (
       <Image
@@ -111,6 +147,13 @@ const CubeGame = () => {
 
       <View style={{padding: 10, justifyContent: 'center'}}>
         <Coins totalBets={totalBets} />
+        <TextInput
+          placeholder="put it here"
+          onChangeText={text => setOtp(text)}
+          value={otp}
+        />
+        <Button title="sendOTP" onButtonPressed={trySending} />
+        <Button title="confirm" onButtonPressed={tryConfirming} />
 
         {/* Set Of Colors */}
         <FlatList

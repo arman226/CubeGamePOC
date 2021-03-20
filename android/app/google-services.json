@@ -1,0 +1,69 @@
+{
+  "project_info": {
+    "project_number": "398291113816",
+    "firebase_url": "https://reactproject-d9d90.firebaseio.com",
+    "project_id": "reactproject-d9d90",
+    "storage_bucket": "reactproject-d9d90.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:398291113816:android:1de06ecf9002aa6d80372d",
+        "android_client_info": {
+          "package_name": "com.cubegames"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "398291113816-47aqll1o8o35lir886vpjp8qkun8oad2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD2JM1KQmNshiAMq4e2bkUBtQSy3VaGqTQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "398291113816-47aqll1o8o35lir886vpjp8qkun8oad2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:398291113816:android:29509e5bca1add6980372d",
+        "android_client_info": {
+          "package_name": "com.test.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "398291113816-47aqll1o8o35lir886vpjp8qkun8oad2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD2JM1KQmNshiAMq4e2bkUBtQSy3VaGqTQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "398291113816-47aqll1o8o35lir886vpjp8qkun8oad2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

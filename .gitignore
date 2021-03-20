@@ -29,6 +29,10 @@ build/
 local.properties
 *.iml
 
+java_pid34636.hprof
+
+
+
 # node.js
 #
 node_modules/

@@ -29,7 +29,9 @@ const PlaceBetsModal = ({
         <TouchableOpacity style={styles.optionsContainer} activeOpacity={1}>
           <FlatList
             data={values}
-            numColumns={3}
+            showsVerticalScrollIndicator={false}
+            showsHorizontalScrollIndicator={false}
+            numColumns={4}
             contentContainerStyle={styles.optionslist}
             keyExtractor={(item, index) => index.toString()}
             renderItem={({item}) => (
@@ -72,6 +74,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   optionslist: {
+    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -79,8 +82,12 @@ const styles = StyleSheet.create({
     backgroundColor: 'blue',
     padding: 6,
     alignItems: 'center',
-    borderRadius: 20,
+    justifyContent: 'center',
+    borderRadius: 40,
     margin: 10,
+    height: 48,
+    width: 48,
+    borderWidth: 2,
   },
   itemText: {
     color: 'white',

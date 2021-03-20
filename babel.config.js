@@ -11,6 +11,8 @@ module.exports = {
           routes: './app/routes',
           screens: './app/screens',
           utils: './app/utils',
+          assets: './app/assets',
+          constants: './app/constants',
         },
       },
     ],

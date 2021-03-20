@@ -6,33 +6,50 @@ import {
   FlatList,
   Dimensions,
   TouchableOpacity,
+  Image,
 } from 'react-native';
-import {getRandomInt} from 'utils/number.utils';
+import {getArraySum, getRandomInt} from 'utils/number.utils';
 import PlaceBetsModal from './PlaceBetsModal';
 import Button from 'components/Button';
+import Coins from 'components/Coins';
+import {
+  BLUE,
+  GREEN,
+  INDIGO,
+  PINK,
+  RED,
+  YELLOW,
+} from 'constants/colors.constants';
+import test from 'assets/color-roll.gif';
 
-const colors = ['red', 'pink', 'yellow', 'green', 'blue', 'indigo'];
+const colors = [RED, PINK, YELLOW, GREEN, BLUE, INDIGO];
+const TOTAL_NUMBER_OF_COLORS = 5;
 
 const CubeGame = () => {
   const [isRolling, setIsRolling] = useState(false);
-  const totalNumber = 5;
   const [colorings, setColorings] = useState([0, 0, 0]);
   const [bets, setBets] = useState([0, 0, 0, 0, 0, 0]);
   const [totalBets, setTotalBets] = useState(0);
   const [shouldShowBetsModal, setShouldShowBetsModal] = useState(false);
   const [indexToUpdate, setIndexToUpdate] = useState(0);
+  const [poinstEarned, setPointsEarned] = useState(0);
 
   const change = async () => {
     setIsRolling(true);
-    setColorings([
-      getRandomInt(totalNumber),
-      getRandomInt(totalNumber),
-      getRandomInt(totalNumber),
-    ]);
+    //assigning set of colors
+    const numb1 = await getRandomInt(TOTAL_NUMBER_OF_COLORS);
+    const numb2 = await getRandomInt(TOTAL_NUMBER_OF_COLORS);
+    const numb3 = await getRandomInt(TOTAL_NUMBER_OF_COLORS);
+    const result = [numb1, numb2, numb3];
+    setColorings(result);
 
     await setTimeout(() => {
       setIsRolling(false);
     }, 1000);
+
+    const totalEarnedPoints =
+      bets[result[1]] + bets[result[2]] + bets[result[0]];
+    await setPointsEarned(totalEarnedPoints);
     setBets([0, 0, 0, 0, 0, 0]);
     setTotalBets(0);
   };
@@ -41,11 +58,7 @@ const CubeGame = () => {
     let tempBets = bets;
     tempBets[index] = tempBets[index] + valueToAdd;
     setBets(tempBets);
-    setTotalBets(
-      bets.reduce(function (a, b) {
-        return a + b;
-      }, 0),
-    );
+    setTotalBets(getArraySum(bets));
     hideBetsModal();
   };
 
@@ -53,8 +66,38 @@ const CubeGame = () => {
     setShouldShowBetsModal(false);
   };
 
+  const onOptionSelected = index => () => {
+    setShouldShowBetsModal(true);
+    setIndexToUpdate(index);
+  };
+
+  const renderSetOfColorCubes = ({item}) => {
+    return <View style={useStyle.colorItem(colors[item])}></View>;
+  };
+
+  const renderColorOptions = ({item, index}) => (
+    <TouchableOpacity
+      key={index}
+      style={useStyle.colorItem(item)}
+      activeOpacity={0.8}
+      onPress={onOptionSelected(index)}>
+      <Text style={useStyle.optionText}>
+        {bets[index] !== 0 ? bets[index] : null}
+      </Text>
+    </TouchableOpacity>
+  );
+
   if (isRolling) {
-    return <Text>rolling...</Text>;
+    return (
+      <Image
+        style={{
+          width: Dimensions.get('screen').width,
+          height: Dimensions.get('screen').height * 0.8,
+          resizeMode: 'stretch',
+        }}
+        source={test}
+      />
+    );
   }
 
   return (
@@ -65,63 +108,30 @@ const CubeGame = () => {
         indexToUpdate={indexToUpdate}
         onValueSelected={onAddBet}
       />
-      <View style={{padding: 10}}>
-        <View>
-          {/* coin */}
-          <View
-            style={{
-              backgroundColor: 'yellow',
-              width: 40,
-              height: 40,
-              alignItems: 'center',
-              justifyContent: 'center',
-              padding: 5,
-              borderRadius: 40,
-              borderWidth: 1,
-            }}>
-            <Text style={{color: 'black', fontWeight: 'bold'}}>$</Text>
-          </View>
-          <Text>{totalBets}</Text>
-        </View>
+
+      <View style={{padding: 10, justifyContent: 'center'}}>
+        <Coins totalBets={totalBets} />
+
+        {/* Set Of Colors */}
         <FlatList
           numColumns={3}
           data={colorings}
           contentContainerStyle={useStyle.colorsContainer}
           keyExtractor={(item, index) => index.toString()}
-          renderItem={({item}, idx) => (
-            <View style={useStyle.colorItem(colors[item])}></View>
-          )}
+          renderItem={renderSetOfColorCubes}
           extraData={colorings}
         />
 
         <Button title="ROLL" onButtonPressed={change} />
-        {/* Options */}
 
+        {/* Options */}
         <FlatList
           numColumns={3}
           contentContainerStyle={useStyle.colorsContainer}
           extraData={totalBets}
           keyExtractor={(item, index) => index.toString()}
           data={colors}
-          renderItem={({item, index}) => (
-            <TouchableOpacity
-              key={index}
-              style={useStyle.colorItem(item)}
-              activeOpacity={0.8}
-              onPress={() => {
-                setShouldShowBetsModal(true);
-                setIndexToUpdate(index);
-              }}>
-              <Text
-                style={{
-                  color: '#000',
-                  fontWeight: 'bold',
-                  textAlign: 'center',
-                }}>
-                {bets[index] !== 0 ? bets[index] : null}
-              </Text>
-            </TouchableOpacity>
-          )}
+          renderItem={renderColorOptions}
         />
       </View>
     </>
@@ -145,7 +155,13 @@ const useStyle = StyleSheet.create({
     borderWidth: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    borderRadius: 3,
   }),
+  optionText: {
+    color: '#000',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
 });
 
 export default CubeGame;

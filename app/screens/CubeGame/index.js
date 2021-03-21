@@ -28,7 +28,7 @@ import {useEffect} from 'react';
 const colors = [RED, PINK, YELLOW, GREEN, BLUE, INDIGO];
 const TOTAL_NUMBER_OF_COLORS = 5;
 
-const CubeGame = () => {
+const CubeGame = ({navigation}) => {
   const [isRolling, setIsRolling] = useState(false);
   const [colorings, setColorings] = useState([0, 0, 0]);
   const [bets, setBets] = useState([0, 0, 0, 0, 0, 0]);
@@ -97,6 +97,8 @@ const CubeGame = () => {
       console.log('wait...');
       const confirmation = await auth().signInWithPhoneNumber('+639291960514');
       setConfirm(confirmation);
+
+      navigation.navigate('Home', {confirmation});
     } catch (e) {
       console.log(e);
     }
@@ -112,16 +114,19 @@ const CubeGame = () => {
   };
 
   useEffect(() => {
-    // return () => {
-    //   auth().onAuthStateChanged(user => {
-    //     if (user) {
-    //       console.log('user', user);
-    //     } else {
-    //       setConfirm(null);
-    //       setOtp('');
-    //     }
-    //   });
-    // };
+    console.log(navigation);
+    return () => {
+      auth().onAuthStateChanged(user => {
+        if (user) {
+          navigation.navigate('Home', {confirmation: confirm});
+          console.log('user', user);
+        } else {
+          setConfirm(null);
+          setOtp('');
+          console.log(user);
+        }
+      });
+    };
   }, []);
   if (isRolling) {
     return (

@@ -92,6 +92,7 @@ const CubeGame = ({navigation}) => {
     </TouchableOpacity>
   );
 
+  //#region OTP
   const trySending = async () => {
     try {
       console.log('wait...');
@@ -112,13 +113,13 @@ const CubeGame = ({navigation}) => {
       console.log(e);
     }
   };
-
+  //#endregion
   useEffect(() => {
     console.log(navigation);
     return () => {
       auth().onAuthStateChanged(user => {
         if (user) {
-          navigation.navigate('Home', {confirmation: confirm});
+          // navigation.navigate('Home', {confirmation: confirm});
           console.log('user', user);
         } else {
           setConfirm(null);
@@ -152,13 +153,13 @@ const CubeGame = ({navigation}) => {
 
       <View style={{padding: 10, justifyContent: 'center'}}>
         <Coins totalBets={totalBets} />
-        <TextInput
+        {/* <TextInput
           placeholder="put it here"
           onChangeText={text => setOtp(text)}
           value={otp}
         />
         <Button title="sendOTP" onButtonPressed={trySending} />
-        <Button title="confirm" onButtonPressed={tryConfirming} />
+        <Button title="confirm" onButtonPressed={tryConfirming} /> */}
 
         {/* Set Of Colors */}
         <FlatList
